@@ -106,7 +106,6 @@ class Player(Entity):
 
         # elif self.state == 2:
 
-
     def on_enable(self):
         mouse.locked = True
         self.gui.enabled = True
