@@ -1,4 +1,4 @@
-from main_scr.player import *
+from cls_model.player import *
 from cls_model.switch_cls import Switch
 from cls_model.vpc_cls import VPC
 
