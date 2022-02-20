@@ -32,15 +32,6 @@ class Player(Entity):
         self.mouse_sensitivity = Vec2(40, 40)
 
         self.gravity = 1
-        self.grounded = False
-        self.jump_height = 2
-        self.jump_up_duration = .5
-        self.fall_after = .35 # will interrupt jump up
-        self.jumping = False
-        self.air_time = 0
-
-
-
         self.dis_v=1
         self.hit_info=raycast(origin=camera, direction=camera.forward, ignore=(self,), distance=self.dis_v)
 
@@ -88,8 +79,8 @@ class Player(Entity):
             self.hit_info.entity.Actived()
 
     def input(self, key):
-        if key == 'space':
-            self.jump()
+        # if key == 'space':
+        #     self.jump()
 
         if key == 'tab':
             self.state = not(self.state)
@@ -133,35 +124,8 @@ class Player(Entity):
             self.position += self.direction * self.speed * time.dt
 
         if self.gravity:
-            # gravity
             ray = raycast(self.world_position + (0, self.height, 0), self.down, ignore=(self,))
-
-            if ray.distance <= self.height + .1:
-                if not self.grounded:
-                    self.land()
-                self.grounded = True
-                # make sure it's not a wall and that the point is not too far up
+            if ray.distance <= self.height + .2:
                 if ray.world_normal.y > .7 and ray.world_point.y - self.world_y < .5:  # walk up slope
                     self.y = ray.world_point[1]
-                return
-            else:
-                self.grounded = False
-            # if not on ground and not on way up in jump, fall
-            self.y -= min(self.air_time, ray.distance - .05) * time.dt * 100
-            self.air_time += time.dt * .25 * self.gravity
-
-    def start_fall(self):
-        self.y_animator.pause()
-        self.jumping = False
-
-    def land(self):
-        self.air_time = 0
-        self.grounded = True
-
-    def jump(self):
-        if not self.grounded:
-            return
-        self.grounded = False
-        self.animate_y(self.y+self.jump_height, self.jump_up_duration, resolution=int(1//time.dt), curve=curve.out_expo)
-        invoke(self.start_fall, delay=self.fall_after)
 

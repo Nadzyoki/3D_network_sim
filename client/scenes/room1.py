@@ -55,7 +55,7 @@ scene_parent.Cube = Entity(
     position=Vec3(-16.2953, 0.74973, 0.0),
     rotation=(-0.0, -0.0, -0.0),
     scale=Vec3(1.0, 1.0, 1.0),
-    model=deepcopy(meshes['Cube_001']),
+    model=copy(meshes['Cube_001']),
     ignore=True,
     )
 scene_parent.Cube_001 = Entity(
@@ -64,7 +64,7 @@ scene_parent.Cube_001 = Entity(
     position=Vec3(14.74085, 0.74973, 0.0),
     rotation=(-0.0, -0.0, -0.0),
     scale=Vec3(1.0, 1.0, 1.0),
-    model=deepcopy(meshes['Cube_002']),
+    model=copy(meshes['Cube_002']),
     ignore=True,
     )
 scene_parent.Cube_002 = Entity(
@@ -73,7 +73,7 @@ scene_parent.Cube_002 = Entity(
     position=Vec3(-0.01434, 0.74973, 14.80206),
     rotation=(-0.0, -90.0, -0.0),
     scale=Vec3(1.0, 1.0, 1.0),
-    model=deepcopy(meshes['Cube_003']),
+    model=copy(meshes['Cube_003']),
     ignore=True,
     )
 scene_parent.Cube_003 = Entity(
@@ -82,7 +82,7 @@ scene_parent.Cube_003 = Entity(
     position=Vec3(-0.01434, 0.74973, -16.12177),
     rotation=(-0.0, -90.0, -0.0),
     scale=Vec3(1.0, 1.0, 1.0),
-    model=deepcopy(meshes['Cube_004']),
+    model=copy(meshes['Cube_004']),
     ignore=True,
     )
 scene_parent.ground = Entity(
@@ -91,7 +91,7 @@ scene_parent.ground = Entity(
     position=Vec3(0.0, 0.0, 0.0),
     rotation=(-0.0, -0.0, -0.0),
     scale=Vec3(15.63518, 15.63518, 15.63518),
-    model=deepcopy(meshes['Plane']),
+    model=copy(meshes['Plane']),
     ignore=True,
     )
 print('created entities:', perf_counter() - t)
