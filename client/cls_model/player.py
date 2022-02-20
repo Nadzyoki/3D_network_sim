@@ -40,8 +40,6 @@ class Player(Entity):
         self.state = True
         self.menu = False
 
-
-
     def update(self):
         if not(self.menu):
             self.gui.TextGUI(self.name_of_viewe())
@@ -49,8 +47,6 @@ class Player(Entity):
 
             self.move_pl()
             self.hit_info = raycast(origin=camera, direction=camera.forward, ignore=(self,), distance=self.dis_v)
-
-
 
     def viewe(self):
         if self.hit_info.hit:

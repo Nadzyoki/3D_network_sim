@@ -15,9 +15,15 @@ class Main(Ursina):
             e.collider = 'mesh'
         self.Switch_my = Switch(y=2, z=2, ports=4)
         self.nVPC = VPC(y=2, z=-1)
-
+        #light on screen
         self.Light()
-        self.map = Map(pr=self)
+        #add all object to pool
+        self.pool = []
+        self.pool.append(self.player)
+        self.pool.append(self.Switch_my)
+        self.pool.append(self.nVPC)
+        #create map
+        self.map = Map(pool=self.pool,gr=self.room.ground)
         self.map.y = 2
         self.map.z = 1
         self.map.x = 1
