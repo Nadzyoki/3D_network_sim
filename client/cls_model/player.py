@@ -31,20 +31,12 @@ class Player(Entity):
         mouse.locked = True
         self.mouse_sensitivity = Vec2(40, 40)
 
-        self.gravity = 1
         self.dis_v=1
         self.hit_info=raycast(origin=camera, direction=camera.forward, ignore=(self,), distance=self.dis_v)
 
         for key, value in kwargs.items():
             setattr(self, key ,value)
-
-        # make sure we don't fall through the ground if we start inside it
-        if self.gravity:
-            ray = raycast(self.world_position+(0,self.height,0), self.down, ignore=(self,))
-            if ray.hit:
-                self.y = ray.world_point.y
-
-    #     state of choise
+        #state of choise
         self.state = True
         self.menu = False
 
@@ -66,9 +58,8 @@ class Player(Entity):
 
     def name_of_viewe(self):
         if self.viewe():
-            obf = self.hit_info.entity
             # print(obf.name,obf.world_position,obf.parent)
-            return obf.name
+            return self.hit_info.entity.name
 
     def vec_of_viewe(self):
         if self.viewe():
@@ -84,6 +75,7 @@ class Player(Entity):
 
         if key == 'tab':
             self.state = not(self.state)
+
         # speed up
         if held_keys['shift']:
             self.speed=4
@@ -95,7 +87,6 @@ class Player(Entity):
             if mouse.left:
                 self.actv_of_viewe()
 
-        # elif self.state == 2:
 
     def on_enable(self):
         mouse.locked = True
@@ -123,9 +114,4 @@ class Player(Entity):
         if not feet_ray.hit and not head_ray.hit:
             self.position += self.direction * self.speed * time.dt
 
-        if self.gravity:
-            ray = raycast(self.world_position + (0, self.height, 0), self.down, ignore=(self,))
-            if ray.distance <= self.height + .2:
-                if ray.world_normal.y > .7 and ray.world_point.y - self.world_y < .5:  # walk up slope
-                    self.y = ray.world_point[1]
-
+        raycast(self.world_position + (0, self.height, 0), self.down, ignore=(self,))
