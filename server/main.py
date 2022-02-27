@@ -1,7 +1,7 @@
 from ursinanetworking import*
-import secrets
 
 ADDRESS = ("localhost", 25565)
+
 class Server:
     def __init__(self, address) -> None:
         self.ursinaServer = UrsinaNetworkingServer(*address)
@@ -18,6 +18,5 @@ class Server:
         self.processEventsThread = threading.Thread(target=process_net_events)
         self.processEventsThread.start()
 
-
 if __name__ == "__main__":
-    c = Server(ADDRESS)
+    Server = Server(ADDRESS)
