@@ -8,18 +8,23 @@ class GUI_(Entity):
         # text about on you viewe now
         self.viewe = Text(text='', origin=(1, 0), color=color.green)
         self.state = Text(text='', origin=(12,12), color=color.cyan)
-        self.wp = WindowPanel(
-    title='Custom Window',
-    content=(
-        Text('Name:'),
-        InputField(name='name_field'),
-        Button(text='Submit', color=color.azure),
-        Slider(),
-        Slider(),
+        self.mn = WindowPanel(
+        title='Menu',
+        content=(
+            Button(text='Connecting', color=color.azure),
+            Button(text='Add', color=color.azure)
         ),
         popup=True,
         enabled=False
-    )
+        )
+        self.st = WindowPanel(
+            title='Settings',
+            content=(
+                Button(text='Exit', color=color.azure),
+            ),
+            popup=True,
+            enabled=False
+        )
 
     def TextGUI(self,text):
         self.viewe.text = text
@@ -28,7 +33,10 @@ class GUI_(Entity):
         self.state.text = text
 
     def Menu(self):
-        self.wp.enabled = not(self.wp.enabled)
+        self.mn.enabled = not(self.mn.enabled)
+
+    def Settings(self):
+        self.st.enabled = not (self.st.enabled)
 
 
 
@@ -54,7 +62,7 @@ class Player(Entity):
             setattr(self, key ,value)
         #state of choise
 
-        self.state = State_machine(['move','menu'])
+        self.state = State_machine(['move','menu','esc'])
 
     def update(self):
         match self.state.NowState():
@@ -65,8 +73,9 @@ class Player(Entity):
                 self.hit_info = raycast(origin=camera, direction=camera.forward, ignore=(self,), distance=self.dis_v)
                 # self.on_enable()
             case 'menu':
-                # self.on_disable()
-                pass
+                self.gui.State('Menu')
+            case 'esc':
+                self.gui.State('Settings')
 
     def viewe(self):
         if self.hit_info.hit:
@@ -87,8 +96,12 @@ class Player(Entity):
 
     def input(self, key):
         if key == 'tab':
-            self.state.NextState()
+            self.state.ChangeState('menu')
             self.gui.Menu()
+            self.on_move()
+        if (key == 'escape'):
+            self.state.ChangeState('esc')
+            self.gui.Settings()
             self.on_move()
         # speed up
         if held_keys['shift']:

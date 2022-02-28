@@ -5,7 +5,10 @@ class State_machine:
         self.now = self.list_state[0]
 
     def ChangeState(self,ste):
-        if ((ste in self.list_state) and not(ste == self.now)) : self.now = ste
+        if ((ste in self.list_state) and not(ste == self.now)) :
+            self.now = ste
+        else :
+            self.now = self.list_state[0]
 
     def NextState(self):
         if (self.list_state.index(self.now) == (len(self.list_state)-1)):
