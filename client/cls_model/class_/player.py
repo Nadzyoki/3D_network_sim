@@ -7,6 +7,18 @@ class GUI_(Entity):
         # text about on you viewe now
         self.viewe = Text(text='', origin=(1, 0), color=color.green)
         self.state = Text(text='', origin=(12,12), color=color.cyan)
+        self.wp = WindowPanel(
+    title='Custom Window',
+    content=(
+        Text('Name:'),
+        InputField(name='name_field'),
+        Button(text='Submit', color=color.azure),
+        Slider(),
+        Slider(),
+        ),
+        popup=True,
+        enabled=False
+    )
 
     def TextGUI(self,text):
         self.viewe.text = text
