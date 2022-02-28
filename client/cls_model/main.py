@@ -3,7 +3,6 @@ from class_.switch_cls import Switch
 from class_.vpc_cls import VPC
 from class_.map import Map
 
-
 #main body
 class Room(Ursina):
     def __init__(self):
@@ -16,7 +15,7 @@ class Room(Ursina):
             e.collider = 'mesh'
         self.Switch_my = Switch(y=2, z=2, ports=4)
         self.nVPC = VPC(y=2, z=-1)
-        #light on screen
+        #light in room
         self.Light()
         #add all object to pool
         self.pool = []

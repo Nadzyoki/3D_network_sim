@@ -21,14 +21,6 @@ class Switch(Entity):
 
         self.Ports(ports)
 
-        self.activable = False
-
-    # def update(self):
-        # for ob in self.prt_lst:
-        #     ob.Update()
-
-
-
     def Ports(self,num):
         z = -.45
         x = .5
@@ -49,9 +41,6 @@ class Switch(Entity):
         self.x = x
         self.y = y
         self.z = z
-
-
-
 
 class PRT_fs(Entity):
     def __init__(self,num,nm,parent):

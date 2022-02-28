@@ -13,7 +13,6 @@ class VPC(Entity):
         self.y = y
         self.z = z
 
-        self.activable = False
         self.key=Keybord(parent=self,nm=name)
         self.key.y-=.2
         self.key.x += .2
@@ -40,6 +39,9 @@ class Keybord(Entity):
         self.activable = False
         self.scale = (.5,.1,.5)
 
+    def Actived(self):
+        pass
+
 
 class Port(Entity):
     def __init__(self,parent,nm,ID_port):
@@ -54,6 +56,9 @@ class Port(Entity):
         self.color = color.yellow
         self.activable = True
 
+    def Actived(self):
+        pass
+
 
 class Monitor(Entity):
     def __init__(self, parent, nm):
@@ -64,4 +69,3 @@ class Monitor(Entity):
             name=("Monitor of " + nm)
         )
         self.scale = (.1, .5, .5)
-        self.activable = False

@@ -1,3 +1,4 @@
+
 class State_machine:
     def __init__(self,states):
         self.list_state = states
@@ -11,7 +12,6 @@ class State_machine:
             self.now = self.list_state[0]
         else :
             self.now = self.list_state[self.list_state.index(self.now)+1]
-
 
     def PastState(self):
         if (self.list_state.index(self.now) == 0):

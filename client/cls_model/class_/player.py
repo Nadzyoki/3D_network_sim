@@ -1,4 +1,5 @@
 from ursina import *
+from .state_mach import State_machine
 
 class GUI_(Entity):
     def __init__(self,parent, **kwargs):
@@ -26,6 +27,9 @@ class GUI_(Entity):
     def State(self,text):
         self.state.text = text
 
+    def Menu(self):
+        self.wp.enabled = not(self.wp.enabled)
+
 
 
 class Player(Entity):
@@ -49,16 +53,20 @@ class Player(Entity):
         for key, value in kwargs.items():
             setattr(self, key ,value)
         #state of choise
-        self.state = True
-        self.menu = False
+
+        self.state = State_machine(['move','menu'])
 
     def update(self):
-        if not(self.menu):
-            self.gui.TextGUI(self.name_of_viewe())
-            self.gui.State(str(self.state))
-
-            self.move_pl()
-            self.hit_info = raycast(origin=camera, direction=camera.forward, ignore=(self,), distance=self.dis_v)
+        match self.state.NowState():
+            case 'move':
+                self.gui.TextGUI(self.name_of_viewe())
+                self.gui.State(str(self.state.NowState()))
+                self.move_pl()
+                self.hit_info = raycast(origin=camera, direction=camera.forward, ignore=(self,), distance=self.dis_v)
+                # self.on_enable()
+            case 'menu':
+                # self.on_disable()
+                pass
 
     def viewe(self):
         if self.hit_info.hit:
@@ -78,31 +86,26 @@ class Player(Entity):
             self.hit_info.entity.Actived()
 
     def input(self, key):
-        # if key == 'space':
-        #     self.jump()
-
         if key == 'tab':
-            self.state = not(self.state)
-
+            self.state.NextState()
+            self.gui.Menu()
+            self.on_move()
         # speed up
         if held_keys['shift']:
             self.speed=4
         else :
             self.speed=2
 
-        if self.state:
-            # color of wieve
+        if self.state.NowState() == 'move':
+
             if mouse.left:
-                self.actv_of_viewe()
+                if hasattr(self.hit_info.entity,'activable'):
+                    self.actv_of_viewe()
 
 
-    def on_enable(self):
-        mouse.locked = True
-        self.gui.enabled = True
+    def on_move(self):
+        mouse.locked = not(mouse.locked)
 
-    def on_disable(self):
-        mouse.locked = False
-        self.gui.enabled = False
 
     #move and vector of viewe
     def move_pl(self):
