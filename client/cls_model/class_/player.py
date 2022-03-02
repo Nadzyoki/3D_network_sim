@@ -61,20 +61,28 @@ class Player(Entity):
         for key, value in kwargs.items():
             setattr(self, key ,value)
         #state of choise
+        self.map_event = {
 
-        self.state = State_machine(['move','menu','esc'])
+        'MoveEsc': 'Esc',
+        'MoveTab': 'Tab',
+
+        'TabTab': 'Move',
+
+        'EscEsc': 'Move',
+        }
+        self.state = State_machine(self.map_event,'Move')
 
     def update(self):
-        match self.state.NowState():
-            case 'move':
+        match self.state.now:
+            case 'Move':
                 self.gui.TextGUI(self.name_of_viewe())
-                self.gui.State(str(self.state.NowState()))
+                self.gui.State(str(self.state.now))
                 self.move_pl()
                 self.hit_info = raycast(origin=camera, direction=camera.forward, ignore=(self,), distance=self.dis_v)
                 # self.on_enable()
-            case 'menu':
+            case 'Tab':
                 self.gui.State('Menu')
-            case 'esc':
+            case 'Esc':
                 self.gui.State('Settings')
 
     def viewe(self):
@@ -96,20 +104,16 @@ class Player(Entity):
 
     def input(self, key):
         if key == 'tab':
-            self.state.ChangeState('menu')
-            self.gui.Menu()
-            self.on_move()
+            self.state.Event('Tab')
         if (key == 'escape'):
-            self.state.ChangeState('esc')
-            self.gui.Settings()
-            self.on_move()
+            self.state.Event('Esc')
         # speed up
         if held_keys['shift']:
             self.speed=4
         else :
             self.speed=2
 
-        if self.state.NowState() == 'move':
+        if self.state.now == 'Move':
 
             if mouse.left:
                 if hasattr(self.hit_info.entity,'activable'):
