@@ -38,7 +38,7 @@ class GUI_(Entity):
         ###############################################################
         # Move menu
         ###############################################################
-        self.mv = ButtonGroup(('1','2','3','4','5'), min_selection=1,x=-.5,y=-.4, default='1', selected_color=color.green)
+        self.mv = ButtonGroup(('1 Connection','2 Add','3 Delete','4 Work'), min_selection=1,x=-.5,y=-.4, default='1 Connection', selected_color=color.green)
         ###############################################################
         self.menu_list = {'Esc':self.st,'Tab':self.mn,'Move':self.mv}
 
@@ -86,6 +86,13 @@ class Player(Entity):
         'EscEsc': 'Move',
         }
         self.now_state='Move'
+        #move tool
+        self.move_tool ={
+            '1':'1 Connection',
+            '2':'2 Add',
+            '3':'3 Delete',
+            '4':'4 Work',
+        }
 
     ####################################################################
                     #Main update of player
@@ -97,8 +104,9 @@ class Player(Entity):
                 self.move_pl()
                 self.hit_info = raycast(origin=camera, direction=camera.forward, ignore=(self,), distance=self.dis_v)
 
+
     ####################################################################
-                    #This for actived and get name of object
+                    #This for actived and receiving name of object
     ####################################################################
     def viewe(self):
         if self.hit_info.hit:
@@ -146,13 +154,22 @@ class Player(Entity):
                 self.speed = 4
             else:
                 self.speed = 2
-
+            #selector of mode and his actions
             if mouse.left:
-                if hasattr(self.hit_info.entity,'activable'):
-                    self.actv_of_viewe()
+                match self.gui.mv.value:
+                    case '1 Connection':
+                        if hasattr(self.hit_info.entity,'activable'):
+                            self.actv_of_viewe()
+                    case '2 Add':
+                        pass
+                    case '3 Delete':
+                        pass
+                    case '4 Work':
+                        pass
 
-            if key in ['1','2','3','4','5']:
-                self.gui.mv.value = key
+            if key in ['1','2','3','4']:
+                self.gui.mv.value = self.move_tool[key]
+
 
     ####################################################################
                         #Walk
