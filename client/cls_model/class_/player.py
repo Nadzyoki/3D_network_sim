@@ -181,3 +181,26 @@ class Player(Entity):
 
         raycast(self.world_position + (0, self.height, 0), self.down, ignore=(self,))
     ####################################################################
+
+####################################################################
+            #Connection tool
+####################################################################
+class Connection_tool:
+    def __init__(self, mach):
+        self.One = None
+        self.Two = None
+        self.Machine = mach
+
+    def Connect(self, address):
+        if self.One == None:
+            self.One = address
+        elif self.Two == None:
+            self.Two = address
+            self.Send()
+
+    def Send(self):
+        self.Machine.connect_ports(self.One, self.Two)
+        self.One = None
+        self.Two = None
+
+####################################################################
