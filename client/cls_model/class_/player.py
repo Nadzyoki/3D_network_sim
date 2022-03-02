@@ -1,6 +1,8 @@
 from ursina import *
-from .state_mach import State_machine
 
+####################################################################
+                #GUI
+####################################################################
 class GUI_(Entity):
     def __init__(self,parent, **kwargs):
         super().__init__()
@@ -25,6 +27,14 @@ class GUI_(Entity):
             popup=True,
             enabled=False
         )
+        self.menu_list = {'Esc':self.st,'Tab':self.mn}
+
+    def Disable_menu(self,ev=None):
+        if ev == None:
+            for i in self.menu_list.keys():
+                self.menu_list[i].enabled=False
+        else :
+            self.menu_list[ev].enabled =True
 
     def TextGUI(self,text):
         self.viewe.text = text
@@ -37,10 +47,13 @@ class GUI_(Entity):
 
     def Settings(self):
         self.st.enabled = not (self.st.enabled)
-
+####################################################################
 
 
 class Player(Entity):
+    ####################################################################
+                        #Init of player
+    ####################################################################
     def __init__(self, **kwargs):
         self.gui = GUI_(parent=camera.ui)
         super().__init__()
@@ -70,21 +83,25 @@ class Player(Entity):
 
         'EscEsc': 'Move',
         }
-        self.state = State_machine(self.map_event,'Move')
+        self.now_state='Move'
 
+    ####################################################################
+                    #Main update of player
+    ####################################################################
     def update(self):
-        match self.state.now:
+        match self.now_state:
             case 'Move':
                 self.gui.TextGUI(self.name_of_viewe())
-                self.gui.State(str(self.state.now))
                 self.move_pl()
                 self.hit_info = raycast(origin=camera, direction=camera.forward, ignore=(self,), distance=self.dis_v)
-                # self.on_enable()
-            case 'Tab':
-                self.gui.State('Menu')
-            case 'Esc':
-                self.gui.State('Settings')
+            # case 'Tab':
+            #     self.gui.State('Menu')
+            # case 'Esc':
+            #     self.gui.State('Settings')
 
+    ####################################################################
+                    #This for actived and get name of object
+    ####################################################################
     def viewe(self):
         if self.hit_info.hit:
             return True
@@ -101,30 +118,50 @@ class Player(Entity):
     def actv_of_viewe(self):
         if self.viewe() and (self.hit_info.entity.activable == True):
             self.hit_info.entity.Actived()
+    ####################################################################
+                        #Work with statement
+    ####################################################################
+    def Statement(self, ev):
+        if (self.now_state + ev) in self.map_event:
+            return self.map_event[self.now_state + ev]
+        else :
+            return None
 
+    def Chage_statement(self,ev):
+        if ev == 'Move':
+            self.now_state = ev
+            self.gui.Disable_menu()
+            self.on_move()
+        elif not(ev == None):
+            self.now_state=ev
+            self.gui.Disable_menu(ev)
+            self.on_move()
+
+    ####################################################################
+                        #Input
+    ####################################################################
     def input(self, key):
         if key == 'tab':
-            self.state.Event('Tab')
+            self.Chage_statement(self.Statement('Tab'))
         if (key == 'escape'):
-            self.state.Event('Esc')
+            self.Chage_statement(self.Statement('Esc'))
         # speed up
         if held_keys['shift']:
             self.speed=4
         else :
             self.speed=2
 
-        if self.state.now == 'Move':
-
+        if self.now_state == 'Move':
             if mouse.left:
                 if hasattr(self.hit_info.entity,'activable'):
                     self.actv_of_viewe()
 
-
+    ####################################################################
+                        #Walk
+    ####################################################################
     def on_move(self):
         mouse.locked = not(mouse.locked)
 
-
-    #move and vector of viewe
     def move_pl(self):
         self.rotation_y += mouse.velocity[0] * self.mouse_sensitivity[1]
 
@@ -143,3 +180,4 @@ class Player(Entity):
             self.position += self.direction * self.speed * time.dt
 
         raycast(self.world_position + (0, self.height, 0), self.down, ignore=(self,))
+    ####################################################################
