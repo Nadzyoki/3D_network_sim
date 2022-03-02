@@ -6,47 +6,49 @@ from ursina import *
 class GUI_(Entity):
     def __init__(self,parent, **kwargs):
         super().__init__()
+        #point in center
         self.point_=Entity(parent = parent, model='quad', color=color.pink, scale=.01, rotation_z=45)
         # text about on you viewe now
         self.viewe = Text(text='', origin=(1, 0), color=color.green)
-        self.state = Text(text='', origin=(12,12), color=color.cyan)
+        ###############################################################
+                        #menu
+        ###############################################################
         self.mn = WindowPanel(
         title='Menu',
         content=(
             Button(text='Connecting', color=color.azure),
             Button(text='Add', color=color.azure)
         ),
-        popup=True,
+        popup=False,
         enabled=False
         )
+        ###############################################################
+                    #Settings menu
+        ###############################################################
+        self.Exit_but = Button(text='Exit', color=color.azure)
+        self.Exit_but.on_click = application.quit
         self.st = WindowPanel(
             title='Settings',
             content=(
-                Button(text='Exit', color=color.azure),
+                self.Exit_but,
             ),
-            popup=True,
+            popup=False,
             enabled=False
         )
-        self.menu_list = {'Esc':self.st,'Tab':self.mn}
+        ###############################################################
+        # Move menu
+        ###############################################################
+        self.mv = ButtonGroup(('1','2','3','4','5'), min_selection=1,x=-.5,y=-.4, default='1', selected_color=color.green)
+        ###############################################################
+        self.menu_list = {'Esc':self.st,'Tab':self.mn,'Move':self.mv}
 
-    def Disable_menu(self,ev=None):
-        if ev == None:
-            for i in self.menu_list.keys():
-                self.menu_list[i].enabled=False
-        else :
-            self.menu_list[ev].enabled =True
+    def Disable_menu(self,ev):
+        for i in self.menu_list.keys():
+            self.menu_list[i].enabled=False
+        self.menu_list[ev].enabled =True
 
     def TextGUI(self,text):
         self.viewe.text = text
-
-    def State(self,text):
-        self.state.text = text
-
-    def Menu(self):
-        self.mn.enabled = not(self.mn.enabled)
-
-    def Settings(self):
-        self.st.enabled = not (self.st.enabled)
 ####################################################################
 
 
@@ -94,10 +96,6 @@ class Player(Entity):
                 self.gui.TextGUI(self.name_of_viewe())
                 self.move_pl()
                 self.hit_info = raycast(origin=camera, direction=camera.forward, ignore=(self,), distance=self.dis_v)
-            # case 'Tab':
-            #     self.gui.State('Menu')
-            # case 'Esc':
-            #     self.gui.State('Settings')
 
     ####################################################################
                     #This for actived and get name of object
@@ -124,15 +122,9 @@ class Player(Entity):
     def Statement(self, ev):
         if (self.now_state + ev) in self.map_event:
             return self.map_event[self.now_state + ev]
-        else :
-            return None
 
     def Chage_statement(self,ev):
-        if ev == 'Move':
-            self.now_state = ev
-            self.gui.Disable_menu()
-            self.on_move()
-        elif not(ev == None):
+        if not(ev == None):
             self.now_state=ev
             self.gui.Disable_menu(ev)
             self.on_move()
@@ -145,16 +137,22 @@ class Player(Entity):
             self.Chage_statement(self.Statement('Tab'))
         if (key == 'escape'):
             self.Chage_statement(self.Statement('Esc'))
-        # speed up
-        if held_keys['shift']:
-            self.speed=4
-        else :
-            self.speed=2
 
+        ####################################################################
+        # Event in state of move
+        ####################################################################
         if self.now_state == 'Move':
+            if held_keys['shift']:
+                self.speed = 4
+            else:
+                self.speed = 2
+
             if mouse.left:
                 if hasattr(self.hit_info.entity,'activable'):
                     self.actv_of_viewe()
+
+            if key in ['1','2','3','4','5']:
+                self.gui.mv.value = key
 
     ####################################################################
                         #Walk
