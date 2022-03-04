@@ -1,7 +1,7 @@
 from ursina import *
 
 class Map(Entity):
-    def __init__(self,pool,gr):
+    def __init__(self,pool=None,gr=None):
         super().__init__()
         #field of map
         self.map = Entity(
@@ -14,7 +14,14 @@ class Map(Entity):
         self.map.scale = (gr.scale.x*self.sc, gr.scale.y*self.sc, .005)
         #add all object on map
         self.pool=[]
-        for i in pool:
+        if not(pool == None):
+            for i in pool:
+                point =self.Point(parent_obj=i,par=self)
+                self.pool.append(point)
+
+    def Update_pool(self,uppool):
+        self.pool.clear()
+        for i in uppool:
             point =self.Point(parent_obj=i,par=self)
             self.pool.append(point)
 
