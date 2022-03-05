@@ -1,32 +1,56 @@
 from ursina import *
-from cls_model.room import *
+from In_Room.Room import Room
+from MainMenu.MainMenu import MainMenu
+from SettingMenu.SettingMenu import SettingMenu
 
-def main():
-    main_menu = Ursina()
-    window.title = 'ursina'
-    pool_main_menu = []
-    title = Text(text=dedent("<scale:2><azure>Simulation of Network in 3D"),
-               position=window.top_left,
-               origin=Vec2(-.5,2)
-               )
-    bl = ButtonList(button_dict=button_dict, position=window.left, button_height=1)
-    pool_main_menu.append(title)
-    pool_main_menu.append(bl)
+class Main(Ursina):
+    def __init__(self):
+        super().__init__(
+            title='ursina'
+        )
 
-    room = Room()
-    button_dict = {
-        'Start': Func(Start,room,pool_main_menu),
-        'two': None,
-        'Setting': None,
-        'Exit': application.quit,
-    }
-    window.color = color._32
-    main_menu.run()
+        self.scence='MM'
 
-def Start(room,pool):
-    for i in pool:
-        i.enabled = False
-    room.Start()
+        # self.scence_change={
+        #     'MM': self.Change('MM'), #Main Menu
+        #     'SM': self.Change('SM'), #Setting Menu
+        #     'IR': self.Change('IR'), #In Room
+        # }
+
+        self.MM = MainMenu(self)
+        self.SM = SettingMenu(self)
+        self.IR = Room(self)
+
+
+        self.scence_all=[
+            self.MM,
+            self.SM,
+            self.IR,
+        ]
+        self.scence_dic = {
+            'MM':self.MM,
+            'SM':self.SM,
+            'IR':self.IR,
+        }
+        self.scence_hope={
+            'MMIR' : 'IR',
+            'MMSM' : 'SM',
+            'MMMM' : 'MM',
+        }
+        self.Change('MM')
+
+    def Ver(self,to):
+        if (self.scence+to) in self.scence_hope:
+            return self.scence_hope[self.scence+to]
+
+    def Change(self,to):
+        if not(self.Ver(to) == None):
+            for i in self.scence_all:
+                i.Stop()
+            self.scence = self.Ver(to)
+            self.scence_dic[self.scence].Start()
+
 
 if __name__ == "__main__":
-    main()
+    main =Main()
+    main.run()

@@ -5,7 +5,8 @@ from .class_.map import Map
 
 #main body
 class Room:
-    def __init__(self):
+    def __init__(self,ch):
+        self.change = ch
         self.pool = []
 
     def Light(self):
@@ -37,6 +38,12 @@ class Room:
         self.map.x = 1
         self.Add_(self.map)
         self.map.Update_pool(self.pool)
+
+    def Stop(self):
+        pass
+
+
+
 
 if __name__ == '__main__':
     app = Room()

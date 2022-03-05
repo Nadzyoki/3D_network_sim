@@ -1,7 +1,7 @@
 from ursina import *
 
 ####################################################################
-                #GUI
+                #CLI
 ####################################################################
 class GUI_(Entity):
     def __init__(self,parent, **kwargs):
@@ -13,34 +13,34 @@ class GUI_(Entity):
         ###############################################################
                         #menu
         ###############################################################
-        self.mn = WindowPanel(
-        title='Menu',
-        content=(
-            Button(text='Connecting', color=color.azure),
-            Button(text='Add', color=color.azure)
-        ),
-        popup=False,
-        enabled=False
-        )
+        # self.mn = WindowPanel(
+        # title='Menu',
+        # content=(
+        #     Button(text='Connecting', color=color.azure),
+        #     Button(text='Add', color=color.azure)
+        # ),
+        # popup=False,
+        # enabled=False
+        # )
         ###############################################################
                     #Settings menu
         ###############################################################
-        self.Exit_but = Button(text='Exit', color=color.azure)
-        self.Exit_but.on_click = application.quit
-        self.st = WindowPanel(
-            title='Settings',
-            content=(
-                self.Exit_but,
-            ),
-            popup=False,
-            enabled=False
-        )
+        # self.Exit_but = Button(text='Exit', color=color.azure)
+        # self.Exit_but.on_click = application.quit
+        # self.st = WindowPanel(
+        #     title='Settings',
+        #     content=(
+        #         self.Exit_but,
+        #     ),
+        #     popup=False,
+        #     enabled=False
+        # )
         ###############################################################
         # Move menu
         ###############################################################
         self.mv = ButtonGroup(('1 Connection','2 Add','3 Delete','4 Work'), min_selection=1,x=-.5,y=-.4, default='1 Connection', selected_color=color.green)
         ###############################################################
-        self.menu_list = {'Esc':self.st,'Tab':self.mn,'Move':self.mv}
+        # self.menu_list = {'Esc':self.st,'Tab':self.mn,'Move':self.mv}
 
     def Disable_menu(self,ev):
         for i in self.menu_list.keys():
@@ -75,18 +75,18 @@ class Player(Entity):
 
         for key, value in kwargs.items():
             setattr(self, key ,value)
-        #state of choise
-        self.map_event = {
-
-        'MoveEsc': 'Esc',
-        'MoveTab': 'Tab',
-
-        'TabTab': 'Move',
-
-        'EscEsc': 'Move',
-        }
-        self.now_state='Move'
-        #move tool
+        # #state of choise
+        # self.map_event = {
+        #
+        # 'MoveEsc': 'Esc',
+        # 'MoveTab': 'Tab',
+        #
+        # 'TabTab': 'Move',
+        #
+        # 'EscEsc': 'Move',
+        # }
+        # self.now_state='Move'
+        # #move tool
         self.move_tool ={
             '1':'1 Connection',
             '2':'2 Add',
@@ -98,11 +98,9 @@ class Player(Entity):
                     #Main update of player
     ####################################################################
     def update(self):
-        match self.now_state:
-            case 'Move':
-                self.gui.TextGUI(self.name_of_viewe())
-                self.move_pl()
-                self.hit_info = raycast(origin=camera, direction=camera.forward, ignore=(self,), distance=self.dis_v)
+        self.gui.TextGUI(self.name_of_viewe())
+        self.move_pl()
+        self.hit_info = raycast(origin=camera, direction=camera.forward, ignore=(self,), distance=self.dis_v)
 
 
     ####################################################################
@@ -141,34 +139,33 @@ class Player(Entity):
                         #Input
     ####################################################################
     def input(self, key):
-        if key == 'tab':
-            self.Chage_statement(self.Statement('Tab'))
-        if (key == 'escape'):
-            self.Chage_statement(self.Statement('Esc'))
+        # if key == 'tab':
+        #     self.Chage_statement(self.Statement('Tab'))
+        # if (key == 'escape'):
+        #     self.Chage_statement(self.Statement('Esc'))
 
         ####################################################################
         # Event in state of move
         ####################################################################
-        if self.now_state == 'Move':
-            if held_keys['shift']:
-                self.speed = 4
-            else:
-                self.speed = 2
-            #selector of mode and his actions
-            if mouse.left:
-                match self.gui.mv.value:
-                    case '1 Connection':
-                        if hasattr(self.hit_info.entity,'activable'):
-                            self.actv_of_viewe()
-                    case '2 Add':
-                        pass
-                    case '3 Delete':
-                        pass
-                    case '4 Work':
-                        pass
+        if held_keys['shift']:
+            self.speed = 4
+        else:
+            self.speed = 2
+        #selector of mode and his actions
+        if mouse.left:
+            match self.gui.mv.value:
+                case '1 Connection':
+                    if hasattr(self.hit_info.entity,'activable'):
+                        self.actv_of_viewe()
+                case '2 Add':
+                    pass
+                case '3 Delete':
+                    pass
+                case '4 Work':
+                    pass
 
-            if key in ['1','2','3','4']:
-                self.gui.mv.value = self.move_tool[key]
+        if key in ['1','2','3','4']:
+            self.gui.mv.value = self.move_tool[key]
 
 
     ####################################################################
