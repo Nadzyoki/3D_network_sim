@@ -8,8 +8,6 @@ class Switch(Entity):
         )
 
         self.scale = (1,0.1,1)
-        # self.collider = 'mesh'
-
         self.ip = ip
         self.port_con = port_con
         self.name = name

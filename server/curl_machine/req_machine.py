@@ -46,11 +46,11 @@ def Delete_node(name):
         'http://' + serv_ip + ':3080/v2/projects/' + Get_ID(prj_name) + '/nodes/' + ID_node(name) ,
         data=data, auth=('admin', 'admin'))
 
-print(ID_node("R3"))
-Start_node("R3")
+# print(ID_node("R3"))
+# Start_node("R3")
 
 
 
 
-req2 = requests.get('http://'+serv_ip+':3080/v2/projects/'+Get_ID(prj_name)+'/nodes',auth=('admin','admin'))
-print(req2.json())
+# req2 = requests.get('http://'+serv_ip+':3080/v2/projects/'+Get_ID(prj_name)+'/nodes',auth=('admin','admin'))
+# print(req2.json())

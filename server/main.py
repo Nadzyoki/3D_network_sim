@@ -1,4 +1,5 @@
-from ursinanetworking import*
+from ursinanetworking import *
+
 
 ADDRESS = ("localhost", 25565)
 
@@ -6,14 +7,19 @@ class Server:
     def __init__(self, address) -> None:
         self.ursinaServer = UrsinaNetworkingServer(*address)
         self.start_events_processing_thread()
+        self.name = "Main"
+        self.room=[
+            "1 room",
+            "test room",
+        ]
 
         @self.ursinaServer.event
         def onClientConnected(Client):
-            Client.send_message("HelloFromServer", f"Hello {Client} how are you ?! :D")
+            print(f"{Client} connect")
+            Client.send_message("serverName",self.name)
+            # Client.send_message("ListRoom",self.room)
 
-        @self.ursinaServer.event
-        def messageFromClient(client,cont):
-            print(f"{client} say: {cont}")
+
 
     def start_events_processing_thread(self):
         def process_net_events():

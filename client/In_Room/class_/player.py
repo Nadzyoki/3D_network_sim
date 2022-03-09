@@ -1,7 +1,7 @@
 from ursina import *
 
 ####################################################################
-                #CLI
+                #GUI
 ####################################################################
 class GUI_(Entity):
     def __init__(self,parent, **kwargs):
@@ -10,42 +10,6 @@ class GUI_(Entity):
         self.point_=Entity(parent = parent, model='quad', color=color.pink, scale=.01, rotation_z=45)
         # text about on you viewe now
         self.viewe = Text(text='', origin=(1, 0), color=color.green)
-        ###############################################################
-                        #menu
-        ###############################################################
-        # self.mn = WindowPanel(
-        # title='Menu',
-        # content=(
-        #     Button(text='Connecting', color=color.azure),
-        #     Button(text='Add', color=color.azure)
-        # ),
-        # popup=False,
-        # enabled=False
-        # )
-        ###############################################################
-                    #Settings menu
-        ###############################################################
-        # self.Exit_but = Button(text='Exit', color=color.azure)
-        # self.Exit_but.on_click = application.quit
-        # self.st = WindowPanel(
-        #     title='Settings',
-        #     content=(
-        #         self.Exit_but,
-        #     ),
-        #     popup=False,
-        #     enabled=False
-        # )
-        ###############################################################
-        # Move menu
-        ###############################################################
-        self.mv = ButtonGroup(('1 Connection','2 Add','3 Delete','4 Work'), min_selection=1,x=-.5,y=-.4, default='1 Connection', selected_color=color.green)
-        ###############################################################
-        # self.menu_list = {'Esc':self.st,'Tab':self.mn,'Move':self.mv}
-
-    def Disable_menu(self,ev):
-        for i in self.menu_list.keys():
-            self.menu_list[i].enabled=False
-        self.menu_list[ev].enabled =True
 
     def TextGUI(self,text):
         self.viewe.text = text
@@ -56,12 +20,16 @@ class Player(Entity):
     ####################################################################
                         #Init of player
     ####################################################################
-    def __init__(self, **kwargs):
+    def __init__(self,ch, **kwargs):
+        self.change = ch
         self.gui = GUI_(parent=camera.ui)
+        self.mv = ButtonGroup(('1 Connection', '2 Add', '3 Delete', '4 Work'), min_selection=1, x=-.5, y=-.4,
+                              default='1 Connection', selected_color=color.green)
         super().__init__()
         self.speed = 1
         self.height = 2
         self.camera_pivot = Entity(parent=self, y=self.height)
+        self.p_l = PointLight(parent=camera, color=color.white, position=(0, 10, -1, 5))
 
         camera.parent = self.camera_pivot
         camera.position = (0,0,0)
@@ -75,18 +43,6 @@ class Player(Entity):
 
         for key, value in kwargs.items():
             setattr(self, key ,value)
-        # #state of choise
-        # self.map_event = {
-        #
-        # 'MoveEsc': 'Esc',
-        # 'MoveTab': 'Tab',
-        #
-        # 'TabTab': 'Move',
-        #
-        # 'EscEsc': 'Move',
-        # }
-        # self.now_state='Move'
-        # #move tool
         self.move_tool ={
             '1':'1 Connection',
             '2':'2 Add',
@@ -122,30 +78,16 @@ class Player(Entity):
     def actv_of_viewe(self):
         if self.viewe() and (self.hit_info.entity.activable == True):
             self.hit_info.entity.Actived()
-    ####################################################################
-                        #Work with statement
-    ####################################################################
-    def Statement(self, ev):
-        if (self.now_state + ev) in self.map_event:
-            return self.map_event[self.now_state + ev]
-
-    def Chage_statement(self,ev):
-        if not(ev == None):
-            self.now_state=ev
-            self.gui.Disable_menu(ev)
-            self.on_move()
 
     ####################################################################
                         #Input
     ####################################################################
     def input(self, key):
-        # if key == 'tab':
-        #     self.Chage_statement(self.Statement('Tab'))
-        # if (key == 'escape'):
-        #     self.Chage_statement(self.Statement('Esc'))
-
+        if key == 'escape':
+            self.change.Change('MM')
+            print('1')
         ####################################################################
-        # Event in state of move
+        # Event in state
         ####################################################################
         if held_keys['shift']:
             self.speed = 4
@@ -153,7 +95,7 @@ class Player(Entity):
             self.speed = 2
         #selector of mode and his actions
         if mouse.left:
-            match self.gui.mv.value:
+            match self.mv.value:
                 case '1 Connection':
                     if hasattr(self.hit_info.entity,'activable'):
                         self.actv_of_viewe()
@@ -165,14 +107,14 @@ class Player(Entity):
                     pass
 
         if key in ['1','2','3','4']:
-            self.gui.mv.value = self.move_tool[key]
+            self.mv.value = self.move_tool[key]
 
 
     ####################################################################
                         #Walk
     ####################################################################
-    def on_move(self):
-        mouse.locked = not(mouse.locked)
+    # def on_move(self):
+    #     mouse.locked = not(mouse.locked)
 
     def move_pl(self):
         self.rotation_y += mouse.velocity[0] * self.mouse_sensitivity[1]

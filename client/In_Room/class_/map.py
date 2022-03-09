@@ -1,7 +1,7 @@
 from ursina import *
 
 class Map(Entity):
-    def __init__(self,pool=None,gr=None):
+    def __init__(self, x=0,y=0,z=0,pool=None,gr=None):
         super().__init__()
         #field of map
         self.map = Entity(
@@ -10,6 +10,9 @@ class Map(Entity):
             parent=self,
             name='map'
         )
+        self.x = x
+        self.y = y
+        self.z = z
         self.sc=0.08
         self.map.scale = (gr.scale.x*self.sc, gr.scale.y*self.sc, .005)
         #add all object on map
