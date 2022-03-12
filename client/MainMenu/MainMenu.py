@@ -14,9 +14,7 @@ class MainMenu(Entity):
                           position=window.top_left,
                           origin=Vec2(-.5, 2)
                           )
-        self.nameServer = Text(text=("Server : "+self.change.client.server_name),
-                               position=window.bottom,
-                               )
+        self.nameServer = Text(text=("Server : "+self.change.server_name),)
         self.rooms = WindowPanel(
             title="Room list",
             content=(

@@ -5,9 +5,8 @@ from Network.client import Client
 
 
 class Main(Ursina):
-    def __init__(self):
-        self.ADDRESS = ("localhost", 25565)
-        self.client = Client(self.ADDRESS)
+    def __init__(self,client):
+        self.server_name = client.server_name
 
         super().__init__(
             title='ursina',
@@ -58,5 +57,8 @@ class Main(Ursina):
 
 
 if __name__ == "__main__":
-    main = Main()
-    main.run()
+    ADDRESS = ("127.0.0.1", 1234)
+    client = Client(ADDRESS)
+    main = Main(client)
+    client.set_up()
+    client.start(main)
