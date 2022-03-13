@@ -12,6 +12,7 @@ class Server:
         self.users = []
         self.us_dic = {}
         self.address = address_self
+        self.gns = address_gns
         self.server_name="main"
 
     def set_up(self):
@@ -44,7 +45,8 @@ class Server:
                 data_r = data.decode('utf-8').replace('MAU ','',1)
                 await self.send_data_all((str(self.us_dic[user])+" : "+data_r).encode('utf-8'))
             case 'WSN':
-                await self.send_data_user(self.server_name.encode('utf-8'),user)
+                print("whats server name?")
+                await self.send_data_user(('NOS '+self.server_name).encode('utf-8'),user)
 
 
     async def listen_socket(self, listened_socket=None):
@@ -58,7 +60,7 @@ class Server:
     async def accept_socket(self):
         while True:
             user_socket, address = await self.main_loop.sock_accept(self.socket)
-            print(f"User {address} connect {user_socket}")
+            print(f"User {address} connect")
             self.us_dic[user_socket] = "name"
             self.users.append(user_socket)
             self.main_loop.create_task(self.listen_socket(user_socket))
@@ -70,6 +72,6 @@ class Server:
         self.main_loop.run_until_complete(self.main())
 
 if __name__ == "__main__":
-    server = Server(('127.0.0.1',1234))
+    server = Server(('127.0.0.1',1234),('127.0.0.1'))
     server.set_up()
     server.start()

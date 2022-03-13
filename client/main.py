@@ -2,11 +2,15 @@ from ursina import *
 from In_Room.Room import Room
 from MainMenu.MainMenu import MainMenu
 from Network.client import Client
+import asyncio
 
 
 class Main(Ursina):
     def __init__(self,client):
-        self.server_name = client.server_name
+        self.client = client
+        # self.client.main_loop.run_until_complete(self.client.WSN())
+        self.client.WSN()
+        self.server_name = self.client.server_name
 
         super().__init__(
             title='ursina',
@@ -33,6 +37,9 @@ class Main(Ursina):
             'IRMM': 'MM',
         }
         self.Change('MM')
+
+    async def NameServer(self):
+        return await self.client.send_data('WSN')
 
     def Ver(self, to):
         if (self.scence + to) in self.scence_hope:
