@@ -49,7 +49,7 @@ class MainMenu(Entity):
         button_dict = {
             'Start': Func(startM),
             'Setting': Func(startS),
-            'Exit': Func(self.change.qu),
+            'Exit': application.quit,
         }
 
         self.bl = ButtonList(button_dict=button_dict, position=window.left, button_height=1)

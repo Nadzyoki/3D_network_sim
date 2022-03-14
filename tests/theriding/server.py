@@ -86,6 +86,7 @@ class ClientThread(threading.Thread):
                 ans = self.server.selector(msg,self)
                 if ans:
                     self.csocket.sendall(ans.encode('utf-8'))
+                    print(f'send {ans}')
 
 
 class Server:
@@ -117,7 +118,7 @@ class Server:
             case 'WMN':
                 return ('IMS '+'your name '+user.name)
             case 'WSN':
-                return ('IMS '+self.server_name)
+                return ('SN '+self.server_name)
 
         return None
 

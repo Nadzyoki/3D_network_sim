@@ -9,7 +9,6 @@ class Ursa(Entity):
     def __init__(self,client):
         self.client = client
         self.server_name = "no"
-        self.work = True
 
         super().__init__()
 
@@ -61,11 +60,9 @@ class Ursa(Entity):
             case 'IMS':
                 print(data)
             case 'SN':
+                print(f"old name{self.server_name}")
                 self.server_name=n_data[1]
-
-    def qu(self):
-        self.work = False
-        application.quit()
+                print(f"new name{self.server_name}")
 
 
 class Main:
@@ -76,14 +73,11 @@ class Main:
             fullscreen=False,
         )
         self.ursa = Ursa(self.client)
-
         self.client.n_m(self.ursa)
-
         self.task1 = threading.Thread(target=self.client.main)
         self.task1.start()
 
         self.ursan.run()
-
         self.task1.join()
 
 

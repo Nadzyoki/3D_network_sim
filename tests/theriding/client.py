@@ -38,7 +38,7 @@
 #     client.set_up()
 #     client.start()
 
-
+from ursina import *
 import socket
 from threading import Thread
 
@@ -48,7 +48,7 @@ class Client:
         # PORT = 1234
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client.connect(address)
-
+        self.server_name = 'no'
         def task():
             while True:
                 data =  client.recv(4096)
@@ -60,19 +60,32 @@ class Client:
                 client.sendall(bytes(out_data,'UTF-8'))
                 print("Отпаравлено :" + str(out_data))
 
-        t1 = Thread(target=task2)
+        def ur():
+            app = Ursina()
+            app.run()
+
+        # t1 = Thread(target=ur)
         t2 = Thread(target=task)
-        t1.start()
+        # t1.start()
         t2.start()
-        t1.join()
+        # t1.join()
         t2.join()
+        ur()
+
 
     def selector(self,data):
         n_data = data.split()
         match n_data[0]:
             case 'IMS':
                 print(data)
+            case 'SN':
+                self.server_name = n_data[1]
 
 if __name__ == "__main__":
     ADDRESS = ("127.0.0.1", 1234)
-    client = Client(ADDRESS)
+    cclient = Client(ADDRESS)
+    # app = Ursina()
+    # sen = Button(text="name")
+    # sen.on_click = Func(cclient.client.sendall,'WSN'.encode('utf-8'))
+    # text = Text(text=cclient.server_name)
+    # app.run()

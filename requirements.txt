@@ -1,3 +1,2 @@
 requests==2.27.1
-ursina==4.0.0
-UrsinaNetworking==2.1.4
+ursina==4.1.1

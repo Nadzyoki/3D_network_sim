@@ -8,7 +8,7 @@ class Client:
     def n_m(self,n):
         self.main_branch = n
     def main(self):
-        while self.main_branch.work:
+        while True:
             data = self.client.recv(4096)
             print("От сервера :" ,data.decode())
             self.main_branch.selector(data.decode('utf-8'))
