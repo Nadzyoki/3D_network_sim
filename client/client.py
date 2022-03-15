@@ -11,7 +11,7 @@ class Client:
         while self.main_branch.work:
             data = self.client.recv(4096)
             print("От сервера :" ,data.decode())
-            self.main_branch.selector(data.decode('utf-8'))
+            self.main_branch.Selector(data.decode('utf-8'))
 
 if __name__ == "__main__":
     ADDRESS = ("127.0.0.1", 1234)
