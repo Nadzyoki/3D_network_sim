@@ -64,11 +64,8 @@ class Client:
             app = Ursina()
             app.run()
 
-        # t1 = Thread(target=ur)
         t2 = Thread(target=task)
-        # t1.start()
         t2.start()
-        # t1.join()
         t2.join()
         ur()
 
@@ -84,8 +81,3 @@ class Client:
 if __name__ == "__main__":
     ADDRESS = ("127.0.0.1", 1234)
     cclient = Client(ADDRESS)
-    # app = Ursina()
-    # sen = Button(text="name")
-    # sen.on_click = Func(cclient.client.sendall,'WSN'.encode('utf-8'))
-    # text = Text(text=cclient.server_name)
-    # app.run()

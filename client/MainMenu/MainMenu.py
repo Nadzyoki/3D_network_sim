@@ -1,5 +1,5 @@
 from ursina import *
-
+from ursina.prefabs.conversation import Conversation
 
 
 class MainMenu(Entity):
@@ -15,7 +15,9 @@ class MainMenu(Entity):
                           position=window.top_left,
                           origin=Vec2(-.5, 2)
                           )
-        self.nameServer = Text(text=("Server : "+self.change.server_name),)
+        self.nameServer = Text(text=("Server : "+self.change.server_name),position=window.left,origin=Vec2(-.6, 4))
+
+
         self.rooms = WindowPanel(
             title="Room list",
             content=(
@@ -28,16 +30,42 @@ class MainMenu(Entity):
         def startM():
             self.rooms.enabled = not (self.rooms.enabled)
 
-        def updateSN():
-            self.change.client.client.sendall('WSN'.encode('utf-8'))
+        # def updateSN():
+        #     self.change.Sender(what='WSN')
 
-        updSN = Button(text='update name server',)
-        updSN.on_click = Func(updateSN)
+        def reconectServer():
+            if servIN.text and servPRT.text:
+                self.change.main_branch.Reconnect((servIN.text,int(servPRT.text)))
+            else:
+                self.change.main_branch.Reconnect()
+
+        def sendMyName():
+            self.change.Sender(what='CMN',data=nameUSR.text)
+
+        # updSN = Button(text='update name server',)
+        # updSN.on_click = Func(updateSN)
+
+        servIN = InputField(name='ip server')
+        servPRT = InputField(name='port server')
+        nameUSR = InputField(name='name',default=self.change.my_name)
+
+        sendMN = Button(text='send my name', )
+        sendMN.on_click = Func(sendMyName)
+
+        self.recSR = Button(text='reconnect server', )
+        self.recSR.on_click = Func(reconectServer)
 
         self.settings = WindowPanel(
             title="Settings",
             content=(
-                updSN,
+                Space(),
+                # updSN,
+                self.recSR,
+                servIN,
+                servPRT,
+                Space(),
+                sendMN,
+                nameUSR,
             ),
             popup=False,
             enabled=False
@@ -49,7 +77,7 @@ class MainMenu(Entity):
         button_dict = {
             'Start': Func(startM),
             'Setting': Func(startS),
-            'Exit': Func(application.quit),
+            'Exit': Func(self.change.Stop),
         }
 
         self.bl = ButtonList(button_dict=button_dict, position=window.left, button_height=1)

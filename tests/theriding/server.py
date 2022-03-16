@@ -75,18 +75,25 @@ class ClientThread(threading.Thread):
 
     def run(self):
         while True:
-            data = self.csocket.recv(4096)
-            msg = data.decode('utf-8')
-            print(msg)
+            try:
+                data = self.csocket.recv(4096)
 
-            if msg == '':
-                print("Отключение")
+            except self.csocket.error:
                 break
+
             else:
-                ans = self.server.selector(msg,self)
-                if ans:
-                    self.csocket.sendall(ans.encode('utf-8'))
-                    print(f'send {ans}')
+                msg = data.decode('utf-8')
+                print(msg)
+
+                if msg == '':
+                    print("Отключение")
+                    self.csocket.close()
+                    break
+                else:
+                    ans = self.server.selector(msg,self)
+                    if ans:
+                        self.csocket.sendall(ans.encode('utf-8'))
+                        print(f'send {ans}')
 
 
 class Server:
@@ -103,7 +110,7 @@ class Server:
 
 
         while True:
-            server.listen(1)
+            server.listen(5)
             clientsock, clientAddress = server.accept()
             newthread = ClientThread(clientAddress, clientsock,self)
             newthread.start()

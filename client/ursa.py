@@ -4,11 +4,11 @@ from MainMenu.MainMenu import MainMenu
 
 
 class Ursa(Entity):
-    def __init__(self,client):
+    def __init__(self,main,client):
+        self.main_branch = main
         self.client = client
         self.my_name = 'No name'
         self.server_name = "no"
-        self.work = True
 
         super().__init__()
 
@@ -44,24 +44,38 @@ class Ursa(Entity):
             self.scence = self.Ver(to)
             self.scence_dic[self.scence].Start()
 
-
     def Selector(self,data):
-        n_data = data.split()
-        print("some in selector")
-        match n_data[0]:
-            case 'IMS':
-                print(data)
-            case 'SN':
-                self.server_name=n_data[1]
-            case 'MN':
-                self.my_name = n_data[1]
+        if data:
+            n_data = data.split()
+            match n_data[0]:
+                case 'IMS':
+                    print(data)
+                case 'SN':
+                    self.server_name=n_data[1]
+                case 'MN':
+                    self.my_name = n_data[1]
 
-    def Sender(self,what,data):
-        send = lambda x: self.client.sendall(x.encode('utf-8'))
-        match what:
-            case 'WSN':
-                send('WSN')
-            case 'WMN':
-                send('WMN')
-            case 'CMN':
-                send('CMN '+data)
+    def Sender(self,what,data=None):
+        if self.client.may_work:
+            send = lambda x: self.client.client.sendall(x.encode('utf-8'))
+            match what:
+                case 'WSN':
+                    send('WSN')
+                case 'WMN':
+                    send('WMN')
+                case 'CMN':
+                    if not(data==None):
+                        send('CMN '+data)
+                case 'IDS':
+                    send('IDS')
+
+    def Stop(self):
+        if self.client.may_work:
+            self.Sender('IDS')
+            self.client.ON = False
+            self.client.may_work =False
+        else:
+            self.End()
+
+    def End(self):
+        self.main_branch.Stop()

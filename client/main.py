@@ -6,21 +6,40 @@ from ursa import Ursa
 
 class Main:
     def __init__(self,address):
-        self.client = Client(address)
-        self.ursan = Ursina(
+        self.address =address
+
+        self.client = Client(self.address)
+        self.main_ursina = Ursina(
             title='ursina',
             fullscreen=False,
         )
-        self.ursa = Ursa(self.client)
+        self.window = Ursa(self,self.client)
 
-        self.client.n_m(self.ursa)
+        self.client.n_m(self, self.window)
 
         self.task1 = threading.Thread(target=self.client.main)
         self.task1.start()
 
-        self.ursan.run()
+        self.main_ursina.run()
 
-        self.task1.join()
+
+
+    def Reconnect(self,address=None):
+        if self.client.may_work:
+            self.window.Sender('IDS')
+            self.client.may_work = False
+
+        if not address:
+            self.client.Connect(self.address)
+        else:
+            self.client.Connect(address)
+        self.task1 = threading.Thread(target=self.client.main)
+        self.task1.start()
+
+
+    def Stop(self):
+        print('goodbye')
+        application.quit()
 
 
 if __name__ == "__main__":
