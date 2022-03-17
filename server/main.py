@@ -68,7 +68,7 @@ class Server:
     async def accept_socket(self):
         while True:
             user_socket, address = await self.main_loop.sock_accept(self.socket)
-            print(f"{address} подключился")
+            print(f"{user_socket} подключился")
             self.us_dic[user_socket] = "name"
             self.users.append(user_socket)
             self.main_loop.create_task(self.listen_socket(user_socket))
@@ -82,6 +82,7 @@ class Server:
 if __name__ == "__main__":
     port = int(input('what port '))
     name = input('what server name ')
-    server = Server(('127.0.0.1',port),name)
+    ip = input('ip server ')
+    server = Server((ip,port),name)
     server.set_up()
     server.start()

@@ -2,6 +2,7 @@ import threading
 from ursina import *
 from client import Client
 from ursa import Ursa
+import Splash_my
 
 
 class Main:
@@ -12,16 +13,17 @@ class Main:
         self.main_ursina = Ursina(
             title='ursina',
             fullscreen=False,
+            borderless = False ,
+            show_ursina_splash = False,
         )
+        Splash_my.Logo()
         self.window = Ursa(self,self.client)
-
         self.client.n_m(self, self.window)
 
-        self.task1 = threading.Thread(target=self.client.main)
-        self.task1.start()
-
+        # self.task1 = threading.Thread(target=self.client.main)
+        # self.task1.start()
+        self.Reconnect()
         self.main_ursina.run()
-
 
 
     def Reconnect(self,address=None):

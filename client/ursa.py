@@ -4,7 +4,7 @@ from MainMenu.MainMenu import MainMenu
 
 
 class Ursa(Entity):
-    def __init__(self,main,client):
+    def __init__(self,main,client=None):
         self.main_branch = main
         self.client = client
         self.my_name = 'No name'
@@ -54,6 +54,9 @@ class Ursa(Entity):
                     self.server_name=n_data[1]
                 case 'MN':
                     self.my_name = n_data[1]
+        elif data == '':
+            self.server_name="no"
+            self.main_branch.Reconnect()
 
     def Sender(self,what,data=None):
         if self.client.may_work:

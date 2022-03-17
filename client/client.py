@@ -6,6 +6,11 @@ class Client:
         self.ON = True
         self.Connect(address)
 
+    def n_m(self,main,window):
+        self.main_branch = main
+        self.window = window
+
+
     def Connect(self,address):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
@@ -16,12 +21,6 @@ class Client:
         except ConnectionRefusedError:
             print('Нет сервера для подключения')
 
-
-
-    def n_m(self,main,window):
-        self.main_branch = main
-        self.window = window
-
     def main(self):
         while self.may_work:
             data = self.client.recv(4096)
@@ -31,6 +30,7 @@ class Client:
                 self.may_work=False
                 break
             if data.decode('utf-8') == "":
+                self.window.Selector(data.decode('utf-8'))
                 self.may_work = False
                 break
             self.window.Selector(data.decode('utf-8'))
