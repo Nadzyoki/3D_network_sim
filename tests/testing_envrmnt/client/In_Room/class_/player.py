@@ -51,7 +51,7 @@ class Player(Entity):
         }
 
     ####################################################################
-                    #Main update of player
+                    #MAIN update of player
     ####################################################################
     def update(self):
         self.gui.TextGUI(self.name_of_viewe())

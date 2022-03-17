@@ -1,15 +1,15 @@
 import threading
 from ursina import *
-from client import Client
-from ursa import Ursa
-import Splash_my
+from Network_.CLIENT import CLIENT
+from client.Window_.URSA import URSA
+from client.Window_.Splash_ import Splash_my
 
 
-class Main:
+class MAIN:
     def __init__(self,address):
         self.address =address
 
-        self.client = Client(self.address)
+        self.client = CLIENT()
         self.main_ursina = Ursina(
             title='ursina',
             fullscreen=False,
@@ -17,11 +17,8 @@ class Main:
             show_ursina_splash = False,
         )
         Splash_my.Logo()
-        self.window = Ursa(self,self.client)
-        self.client.n_m(self, self.window)
-
-        # self.task1 = threading.Thread(target=self.client.main)
-        # self.task1.start()
+        self.window = URSA(self, self.client)
+        self.client.SetMainWindow(self, self.window)
         self.Reconnect()
         self.main_ursina.run()
 
@@ -35,7 +32,7 @@ class Main:
             self.client.Connect(self.address)
         else:
             self.client.Connect(address)
-        self.task1 = threading.Thread(target=self.client.main)
+        self.task1 = threading.Thread(target=self.client.Main)
         self.task1.start()
 
 
@@ -45,4 +42,4 @@ class Main:
 
 
 if __name__ == "__main__":
-    main = Main(("127.0.0.1", 1234))
+    main = MAIN(("127.0.0.1", 1234))

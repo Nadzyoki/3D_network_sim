@@ -4,10 +4,8 @@ from ursina import *
                 #GUI
 ####################################################################
 class GUI_(Entity):
-    def __init__(self,parent, **kwargs):
+    def __init__(self, **kwargs):
         super().__init__()
-        #point in center
-        self.point_=Entity(parent = parent, model='quad', color=color.pink, scale=.01, rotation_z=45)
         # text about on you viewe now
         self.viewe = Text(text='', origin=(1, 0), color=color.green)
 
@@ -20,16 +18,25 @@ class Player(Entity):
     ####################################################################
                         #Init of player
     ####################################################################
-    def __init__(self,ch, **kwargs):
-        self.change = ch
-        self.gui = GUI_(parent=camera.ui)
-        self.mv = ButtonGroup(('1 Connection', '2 Add', '3 Delete', '4 Work'), min_selection=1, x=-.5, y=-.4,
-                              default='1 Connection', selected_color=color.green)
+    def __init__(self,scn, **kwargs):
         super().__init__()
+
+        self.scene = scn
+        self.gui = GUI_(parent=camera.ui)
+        self.scene.pool.append(self.gui)
+        self.point = Entity(parent=camera.ui, model='quad', color=color.pink, scale=.01, rotation_z=45)
+        self.scene.pool.append(self.point)
+        self.mv = ButtonGroup(('1 Connection', '2 Add', '3 Delete', '4 Work'), min_selection=1, x=-.5, y=-.4,
+                              default='1 Connection',
+                              selected_color=color.green,
+                              parent=self
+                              )
+
         self.speed = 1
         self.height = 2
         self.camera_pivot = Entity(parent=self, y=self.height)
-        self.p_l = PointLight(parent=camera, color=color.white, position=(0, 10, -1, 5))
+        self.p_l = PointLight(parent=self, color=color.white, position=(0, 10, -1, 5))
+        # self.scene.pool.append(self.p_l)
 
         camera.parent = self.camera_pivot
         camera.position = (0,0,0)
@@ -51,7 +58,7 @@ class Player(Entity):
         }
 
     ####################################################################
-                    #Main update of player
+                    #MAIN update of player
     ####################################################################
     def update(self):
         self.gui.TextGUI(self.name_of_viewe())
@@ -83,9 +90,6 @@ class Player(Entity):
                         #Input
     ####################################################################
     def input(self, key):
-        if key == 'escape':
-            self.change.Change('MM')
-            print('1')
         ####################################################################
         # Event in state
         ####################################################################

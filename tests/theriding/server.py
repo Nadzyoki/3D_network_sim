@@ -106,7 +106,7 @@ class Server:
 
         server.bind(address)
         print("Сервер запущен!")
-        self.server_name = "Main server"
+        self.server_name = "MAIN server"
 
 
         while True:

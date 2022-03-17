@@ -11,7 +11,7 @@ class MainMenu(Entity):
 
     def Start(self):
         self.enabled = True
-        self.title = Text(text=dedent("<scale:2><azure>Simulation of Network in 3D"),
+        self.title = Text(text=dedent("<scale:2><azure>Simulation of Network_ in 3D"),
                           position=window.top_left,
                           origin=Vec2(-.5, 2)
                           )

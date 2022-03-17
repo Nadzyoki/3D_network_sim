@@ -1,12 +1,12 @@
 import socket
 
-class Client:
-    def __init__(self, address):
+class CLIENT:
+    def __init__(self):
         self.may_work = False
         self.ON = True
-        self.Connect(address)
+        # self.Connect(address)
 
-    def n_m(self,main,window):
+    def SetMainWindow(self,main,window):
         self.main_branch = main
         self.window = window
 
@@ -21,7 +21,7 @@ class Client:
         except ConnectionRefusedError:
             print('Нет сервера для подключения')
 
-    def main(self):
+    def Main(self):
         while self.may_work:
             data = self.client.recv(4096)
             print("От сервера :" ,data.decode())
@@ -39,4 +39,4 @@ class Client:
 
 if __name__ == "__main__":
     ADDRESS = ("127.0.0.1", 1234)
-    client = Client(ADDRESS)
+    client = CLIENT(ADDRESS)

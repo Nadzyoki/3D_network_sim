@@ -1,4 +1,3 @@
-
 import socket
 import asyncio
 
@@ -68,7 +67,7 @@ class Server:
     async def accept_socket(self):
         while True:
             user_socket, address = await self.main_loop.sock_accept(self.socket)
-            print(f"{user_socket} подключился")
+            print(f"{address} подключился")
             self.us_dic[user_socket] = "name"
             self.users.append(user_socket)
             self.main_loop.create_task(self.listen_socket(user_socket))

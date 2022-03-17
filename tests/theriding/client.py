@@ -1,7 +1,7 @@
 # import socket,threading
 # from threading import Thread
 #
-# class Client:
+# class CLIENT:
 #     def __init__(self,address):
 #         self.socket = socket.socket(
 #             socket.AF_INET,
@@ -34,7 +34,7 @@
 #
 # if __name__ == "__main__":
 #     ADDRESS = ("127.0.0.1", 1234)
-#     client = Client(ADDRESS)
+#     client = CLIENT(ADDRESS)
 #     client.set_up()
 #     client.start()
 
