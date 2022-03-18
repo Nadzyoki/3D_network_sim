@@ -17,8 +17,8 @@ class ROOM(Entity):
         self.enabled = True
 
         # self.room = load_blender_scene('room1', load=False,reload=True,)
-        self.room = Entity(model='cube',scale=(30,.1,30),color=color.green)
-        # trail_renderer = TrailRenderer(parent=self.room)
+        self.room = Entity(model='cube',scale=(30,.1,30),color=color.gray)
+        trail_renderer = TrailRenderer(parent=self.room)
         self.pool.append(self.room)
         # for e in self.room.children:
         #     e.collider = 'mesh'
@@ -43,6 +43,3 @@ class ROOM(Entity):
 if __name__ == '__main__':
     app = Room()
     app.run()
-
-
-

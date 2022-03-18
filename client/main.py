@@ -1,8 +1,8 @@
 import threading
 from ursina import *
 from Network_.CLIENT import CLIENT
-from client.Window_.URSA import URSA
-from client.Window_.Splash_ import Splash_my
+from Window_.URSA import URSA
+from Window_.Splash_ import Splash_my
 
 
 class MAIN:

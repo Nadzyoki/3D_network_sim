@@ -23,20 +23,24 @@ class Player(Entity):
 
         self.scene = scn
         self.gui = GUI_(parent=camera.ui)
-        self.scene.pool.append(self.gui)
-        self.point = Entity(parent=camera.ui, model='quad', color=color.pink, scale=.01, rotation_z=45)
-        self.scene.pool.append(self.point)
-        self.mv = ButtonGroup(('1 Connection', '2 Add', '3 Delete', '4 Work'), min_selection=1, x=-.5, y=-.4,
-                              default='1 Connection',
-                              selected_color=color.green,
-                              parent=self
+
+        self.point = Entity(parent=camera.ui,
+                            model='quad',
+                            color=color.pink,
+                             scale=.01,
+                             rotation_z=45
+                             )
+
+        self.mv = ButtonGroup(('1 Connection', '2 Add', '3 Delete', '4 Work'),
+                                min_selection=1, x=-.5, y=-.4,
+                                default='1 Connection',
+                                selected_color=color.green,
                               )
 
         self.speed = 1
         self.height = 2
         self.camera_pivot = Entity(parent=self, y=self.height)
         self.p_l = PointLight(parent=self, color=color.white, position=(0, 10, -1, 5))
-        # self.scene.pool.append(self.p_l)
 
         camera.parent = self.camera_pivot
         camera.position = (0,0,0)
@@ -46,7 +50,11 @@ class Player(Entity):
         self.mouse_sensitivity = Vec2(40, 40)
 
         self.dis_v=1
-        self.hit_info=raycast(origin=camera, direction=camera.forward, ignore=(self,), distance=self.dis_v)
+        self.hit_info=raycast(origin=camera,
+                             direction=camera.forward,
+                             ignore=(self,),
+                             distance=self.dis_v
+                             )
 
         for key, value in kwargs.items():
             setattr(self, key ,value)
@@ -56,6 +64,12 @@ class Player(Entity):
             '3':'3 Delete',
             '4':'4 Work',
         }
+
+        #pool for destroy Entity
+        self.scene.pool.append(self.gui)
+        self.scene.pool.append(self.point)
+        self.scene.pool.append(self.p_l)
+        self.scene.pool.append(self.mv)
 
     ####################################################################
                     #MAIN update of player

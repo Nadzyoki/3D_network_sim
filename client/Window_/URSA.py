@@ -1,6 +1,6 @@
 from ursina import *
-from client.Window_.MainMenu_.MAINMENU import MAINMENU
-from client.Window_.InRoom_.ROOM import ROOM
+from .MainMenu_.MAINMENU import MAINMENU
+from .InRoom_.ROOM import ROOM
 import threading
 
 
