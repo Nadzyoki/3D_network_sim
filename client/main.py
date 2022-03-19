@@ -42,4 +42,4 @@ class MAIN:
 
 
 if __name__ == "__main__":
-    main = MAIN(("127.0.0.1", 1234))
+    main = MAIN(("127.0.0.1", 6060))
